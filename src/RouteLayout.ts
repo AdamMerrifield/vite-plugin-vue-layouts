@@ -5,19 +5,25 @@ function getClientCode(importCode: string, options: ResolvedOptions) {
 ${importCode}
 
 export function setupLayouts(routes) {
-  return routes.map(route => {
-    const isBoolean = typeof route.meta?.layout === 'boolean'
-    if(isBoolean && !route.meta?.layout) {
-      return route
-    } else {
-      let componentName = !isBoolean && route.meta?.layout ? route.meta?.layout : '${options.defaultLayout}'
+  function deepSetupLayout(routes) {
+    return routes.map(route => {
+      if (route.children?.length > 0) {
+        return { ...route, children: deepSetupLayout(route.children) }
+      }
+      const isBoolean = typeof route.meta?.layout === 'boolean'
+      if(isBoolean && !route.meta?.layout) {
+        return route
+      }
+      const componentName = !isBoolean && route.meta?.layout ? route.meta?.layout : '${options.defaultLayout}'
       return {
         path: route.path,
         component: layouts[componentName],
         children: route.path === '/' ? [route] : [{...route, path: ''}]
       }
-    }
-  })
+    })
+  }
+
+  return deepSetupLayout(routes)
 }
 `
   return code
