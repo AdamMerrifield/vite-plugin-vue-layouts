@@ -1,5 +1,9 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 importers:
 
   .:
@@ -51,7 +55,7 @@ importers:
         specifier: ^4.0.13
         version: 4.0.13(vue@3.2.31)
 
-  examples/clientSide:
+  examples/client-side:
     dependencies:
       vue:
         specifier: ^3.2.31
